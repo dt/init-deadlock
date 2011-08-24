@@ -1,21 +1,21 @@
-class TestObj(val id: String) {
-  def slowDown() = Thread.sleep(500)
-  def say(text: => String) = println(id+" "+text)
+object ObjectA {
+  val id = "A"
   def foo = println(id+ " foo()")
+
+  println(id+" init starting")
+  Thread.sleep(500)
+  println(id+" ref: "+ObjectB.id)
+  println(id+" init complete")
 }
 
-object ObjectA extends TestObj("A") {
-  say("init starting")
-  slowDown()
-  say("ref: "+ObjectB.id)
-  say("init complete")
-}
+object ObjectB {
+  val id = "B"
+  def foo = println(id+ " foo()")
 
-object ObjectB extends TestObj("B") {
-  say("init starting")
-  slowDown()
-  say("ref: "+ObjectA.id)
-  say("init complete")
+  println(id+" init starting")
+  Thread.sleep(500)
+  println(id+" ref: "+ObjectA.id)
+  println(id+" init complete")
 }
 
 object Main {
