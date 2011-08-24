@@ -6,15 +6,15 @@ class TestObj(val id: String) {
 
 object ObjectA extends TestObj("A") {
   say("init starting")
-  say("ref: "+ObjectB.id)
   slowDown()
+  say("ref: "+ObjectB.id)
   say("init complete")
 }
 
 object ObjectB extends TestObj("B") {
   say("init starting")
-  say("ref: "+ObjectA.id)
   slowDown()
+  say("ref: "+ObjectA.id)
   say("init complete")
 }
 
