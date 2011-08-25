@@ -1,28 +1,44 @@
 class A { 
-	public static int x = Slowly.get(B.y+2);
-	public static void foo() { System.out.println("A foo() "+B.y); }
+    public static A instance = new A();
+
+    public A() {
+        System.out.println("A init starting");
+        Slowly.sleep();
+        System.out.println("A call: " + B.instance.foo());
+        System.out.println("A init complete");
+    }
+
+    public String foo() { return "A.foo()"; }
 }
 
 class B {
-	public static int y = Slowly.get(A.x+1);
-	public static void foo() { System.out.println("B foo() "+A.x); }
+    public static B instance = new B();
+    
+    public B() {
+        System.out.println("B init starting");
+        Slowly.sleep();
+        System.out.println("B call: " + A.instance.foo());
+        System.out.println("B init complete");
+    }
+
+	public String foo() { return "B.foo()"; }
 }
 
 class Slowly {
-	public static int get(int x) {
+	public static void sleep() {
 		try{
-			Thread.sleep(1000);
+			Thread.sleep(500);
 		} catch(InterruptedException e) {
 			e.printStackTrace();
-		} 
-		return x;
+		}
+		return;
 	}
 }
 
 public class JavaTest {
  	public static void main(String[] argv) throws Exception {
- 		Thread a = new Thread(){ public void run() { A.foo(); } };
- 		Thread b = new Thread(){ public void run() { B.foo(); } };
+ 		Thread a = new Thread(){ public void run() { A.instance.foo(); } };
+ 		Thread b = new Thread(){ public void run() { B.instance.foo(); } };
  		a.start();
  		b.start();
 
