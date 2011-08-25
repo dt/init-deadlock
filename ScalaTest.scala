@@ -33,27 +33,30 @@ object ScalaTest {
     }
   }
 
-  val wakeup = new Thread {
-    override def run() = {
-      Thread.sleep(5000)
-      println(Console.RED+"DEADLOCK")
-      Runtime.getRuntime().halt(0)
+  val deadlockDetector = {
+    val t = new Thread {
+      override def run() = {
+        Thread.sleep(5000)
+        println(Console.RED+"DEADLOCK")
+        Runtime.getRuntime().halt(0)
+      }
     }
+    t.setDaemon(true)
+    t
   }
 
   def finishedNormally(): Unit = {
     println(Console.GREEN+"Threads finished")
-    System.exit(0)
   }
 
   def parallelInit(): Unit = {
-    List(wakeup, threadA, threadB).foreach(_.start)
+    List(deadlockDetector, threadA, threadB).foreach(_.start)
     List(threadA, threadB).foreach(_.join)
     finishedNormally()
   }
 
   def serialInit(): Unit = {
-    wakeup.start
+    deadlockDetector.start
     threadA.start
     threadA.join
     threadB.start
@@ -63,15 +66,15 @@ object ScalaTest {
 
   def printUsage(): Unit = {
     println("From sbt, run one of the following commands:")
-    println("  'run Main parallel' - for parallel initialization")
-    println("  'run Main serial'   - for serial initialization")
+    println("  'run-main ScalaTest parallel' - for parallel initialization")
+    println("  'run-main ScalaTest serial'   - for serial initialization")
   }
 
   def main(args: Array[String]): Unit = {
-    if (args.size <= 1)
+    if (args.size < 1)
       printUsage()
     else {
-      val mode = args(1)
+      val mode = args(0)
       mode match {
         case "parallel" => parallelInit()
         case "serial" => serialInit()
