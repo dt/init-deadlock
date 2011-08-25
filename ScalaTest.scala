@@ -66,15 +66,15 @@ object ScalaTest {
 
   def printUsage(): Unit = {
     println("From sbt, run one of the following commands:")
-    println("  'run Main parallel' - for parallel initialization")
-    println("  'run Main serial'   - for serial initialization")
+    println("  'run-main ScalaTest parallel' - for parallel initialization")
+    println("  'run-main ScalaTest serial'   - for serial initialization")
   }
 
   def main(args: Array[String]): Unit = {
-    if (args.size <= 1)
+    if (args.size < 1)
       printUsage()
     else {
-      val mode = args(1)
+      val mode = args(0)
       mode match {
         case "parallel" => parallelInit()
         case "serial" => serialInit()
