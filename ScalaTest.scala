@@ -18,7 +18,7 @@ object ObjectB {
   println(id+" init complete")
 }
 
-object Main {
+object ScalaTest {
   val threadA = new Thread { override def run() = ObjectA.foo }
   val threadB = new Thread { override def run() = ObjectB.foo }
 
@@ -28,7 +28,8 @@ object Main {
     Runtime.getRuntime().halt(0)
   }}
 
-  def main(args: Array[String]): Unit = {
+//  def main(args: Array[String]): Unit = { test() }
+  def test() = {
     List(wakeup, threadA, threadB).foreach(_.start)
     List(threadA, threadB).foreach(_.join)
     println(Console.GREEN+"Threads finished")
